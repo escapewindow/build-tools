@@ -1,5 +1,5 @@
-from urllib2 import urlopen
-from urlparse import urljoin
+from six.moves.urllib.request import urlopen
+from six.moves.urllib.parse import urljoin
 try:
     import simplejson as json
 except ImportError:

@@ -2,8 +2,8 @@ import os
 from os import path
 import urllib
 import socket
-from urllib import urlretrieve
-from urllib2 import urlopen, HTTPError, URLError
+from six.moves.urllib.request import urlopen, urlretrieve
+from six.moves.urllib.error import HTTPError, URLError
 
 from redo import retrier
 import requests

@@ -8,11 +8,9 @@
 
 import httplib
 import mimetypes
-import urllib2
 import socket
 from socket import error, herror, gaierror, timeout
 socket.setdefaulttimeout(None)
-import urlparse
 
 
 def post_multipart(host, selector, fields, files):

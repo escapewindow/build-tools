@@ -34,7 +34,7 @@ def getRevisions(dest, branches=None):
         if not rev:
             continue
         if rev not in retval:
-            retval.append(rev)
+            retval.append(six.b(rev))
     retval.reverse()
     return retval
 

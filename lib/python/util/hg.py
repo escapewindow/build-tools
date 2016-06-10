@@ -4,7 +4,7 @@ import re
 import subprocess
 import time
 import sys
-from urlparse import urlsplit
+from six.moves.urllib.parse import urlsplit
 from six.moves.configparser import RawConfigParser
 
 from util.commands import run_cmd, run_quiet_cmd, get_output, remove_path, TERMINATED_PROCESS_MSG

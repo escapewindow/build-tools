@@ -1,4 +1,4 @@
-import urlparse
+import six.moves.urllib.parse as urlparse
 from paths import makeCandidatesDir, makeReleasesDir
 from platforms import buildbot2ftp
 from download import url_exists
