@@ -11,7 +11,7 @@ import hashlib
 import shutil
 import tempfile
 from unittest import TestCase
-from StringIO import StringIO
+from six import StringIO
 from ConfigParser import RawConfigParser
 import mock
 import webob

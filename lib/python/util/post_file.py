@@ -39,7 +39,7 @@ def post_multipart(host, selector, fields, files):
         h.send(body)
         errcode, errmsg, headers = h.getreply()
         return h.file.read()
-    except (httplib.HTTPException, error, herror, gaierror, timeout), e:
+    except (httplib.HTTPException, error, herror, gaierror, timeout) as e:
         print "FAIL: graph server unreachable"
         print "FAIL: " + str(e)
         raise

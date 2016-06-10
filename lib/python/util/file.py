@@ -62,7 +62,7 @@ def safe_unlink(filename):
         else:
             if os.path.exists(filename):
                 os.unlink(filename)
-    except OSError, e:
+    except OSError as e:
         # Ignore "No such file or directory"
         if e.errno == 2:
             return

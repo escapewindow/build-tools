@@ -243,7 +243,7 @@ def remove_path(path):
         return
 
     # Verify the directory is read/write/execute for the current user
-    os.chmod(path, 0700)
+    os.chmod(path, 0o700)
 
     for name in os.listdir(path):
         full_name = os.path.join(path, name)
@@ -254,14 +254,14 @@ def remove_path(path):
                 # I think this is now redundant, but I don't have an NT
                 # machine to test on, so I'm going to leave it in place
                 # -warner
-                os.chmod(full_name, 0600)
+                os.chmod(full_name, 0o600)
 
         if os.path.isdir(full_name):
             remove_path(full_name)
         else:
             # Don't try to chmod links
             if not os.path.islink(full_name):
-                os.chmod(full_name, 0700)
+                os.chmod(full_name, 0o700)
             os.remove(full_name)
     os.rmdir(path)
 

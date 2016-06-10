@@ -186,7 +186,7 @@ def purge(dest):
 
     try:
         run_cmd(cmd, cwd=dest)
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         log.debug('purge failed: %s' % e)
         raise
 
@@ -308,7 +308,7 @@ def clone(repo, dest, branch=None, revision=None, update_dest=True,
         try:
             get_hg_output(cmd=cmd, include_stderr=True, timeout=timeout)
             break
-        except subprocess.CalledProcessError, e:
+        except subprocess.CalledProcessError as e:
             exc = sys.exc_info()
 
             if any(s in e.output for s in TRANSIENT_HG_ERRORS_EXTRA_WAIT):
@@ -390,7 +390,7 @@ def pull(repo, dest, update_dest=True, mirrors=None, **kwargs):
         try:
             get_hg_output(cmd=cmd, cwd=dest, include_stderr=True)
             break
-        except subprocess.CalledProcessError, e:
+        except subprocess.CalledProcessError as e:
             exc = sys.exc_info()
 
             if any(s in e.output for s in TRANSIENT_HG_ERRORS_EXTRA_WAIT):
@@ -436,7 +436,7 @@ def out(src, remote, **kwargs):
                     branch = "default"
                 revs.append((rev, branch))
             return revs
-        except subprocess.CalledProcessError, inst:
+        except subprocess.CalledProcessError as inst:
             # In some situations, some versions of Mercurial return "1"
             # if no changes are found, so we need to ignore this return code
             if inst.returncode == 1:
@@ -626,7 +626,7 @@ def apply_and_push(localrepo, remote, changer, max_attempts=10,
             push(src=localrepo, remote=remote, ssh_username=ssh_username,
                  ssh_key=ssh_key, force=force)
             return
-        except subprocess.CalledProcessError, e:
+        except subprocess.CalledProcessError as e:
             log.debug("Hit error when trying to push: %s" % str(e))
             if n == max_attempts:
                 log.debug("Tried %d times, giving up" % max_attempts)
@@ -641,7 +641,7 @@ def apply_and_push(localrepo, remote, changer, max_attempts=10,
             try:
                 run_cmd(['hg', '--config', 'ui.merge=internal:merge',
                          'rebase'], cwd=localrepo)
-            except subprocess.CalledProcessError, e:
+            except subprocess.CalledProcessError as e:
                 log.debug("Failed to rebase: %s" % str(e))
                 # abort failed rebase
                 run_cmd(['hg', 'rebase', '--abort'], cwd=localrepo)

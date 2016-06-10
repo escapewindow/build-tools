@@ -1,7 +1,7 @@
 """Functions for interacting with hg"""
 import os
 import subprocess
-import urlparse
+from six.moves.urllib import parse as urlparse
 import urllib
 import re
 
@@ -74,7 +74,7 @@ def init(dest, bare=False):
     # Let's create all the directories first
     try:
         os.makedirs(dest)
-    except OSError, e:
+    except OSError as e:
         if e.errno == 20:
             # Not a directory error...one of the parents of dest isn't a
             # directory
