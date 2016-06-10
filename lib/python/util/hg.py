@@ -325,7 +325,7 @@ def clone(repo, dest, branch=None, revision=None, update_dest=True,
                 continue
             raise
     else:
-        raise exc[0], exc[1], exc[2]
+        raise
 
     if update_dest:
         return update(dest, branch, revision)
@@ -403,7 +403,7 @@ def pull(repo, dest, update_dest=True, mirrors=None, **kwargs):
                 continue
             raise
     else:
-        raise exc[0], exc[1], exc[2]
+        raise
 
     if update_dest:
         branch = None

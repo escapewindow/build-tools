@@ -144,7 +144,7 @@ def remote_signfile(options, urls, filename, fmt, token, dest=None):
                 log.info("Copying %s to cache %s", dest, cached_fn)
                 copyfile(dest, cached_fn)
             break
-        except HTTPError, e:
+        except HTTPError as e:
             try:
                 if 'X-Pending' in e.headers:
                     log.debug("%s: pending; try again in a bit", filehash)
