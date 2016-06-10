@@ -10,22 +10,12 @@ import util.git as git
 from util.file import touch
 
 
-def toStr(text):
-    if six.PY3:
-        try:
-            text = text.decode('utf-8')
-        except UnicodeDecodeError:
-            pass
-    return text
-
-
 def getRevisions(dest, branches=None):
     retval = []
     cmd = ['git', 'log', '--pretty=oneline']
     if branches:
         cmd.extend(branches)
-    output = get_output(cmd, cwd=dest)
-    for line in toStr(output).split('\n'):
+    for line in get_output(cmd, cwd=dest).split('\n'):
         line = line.strip()
         if not line:
             continue
@@ -34,7 +24,7 @@ def getRevisions(dest, branches=None):
         if not rev:
             continue
         if rev not in retval:
-            retval.append(six.b(rev))
+            retval.append(rev)
     retval.reverse()
     return retval
 

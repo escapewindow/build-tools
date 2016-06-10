@@ -1,10 +1,11 @@
 """Functions for interacting with hg"""
 import os
 import subprocess
+import six
 from six.moves.urllib import parse as urlparse
 import re
 
-from util.commands import run_cmd, remove_path, run_quiet_cmd
+from util.commands import run_cmd, remove_path, run_quiet_cmd, to_str
 from util.file import safe_unlink
 
 import logging
@@ -410,4 +411,4 @@ def get_revision(path):
     """Returns which revision directory `path` currently has checked out."""
     proc = subprocess.Popen(['git', 'rev-parse', 'HEAD'], cwd=path, stdout=subprocess.PIPE)
     proc.wait()
-    return proc.stdout.read().strip()
+    return to_str(proc.stdout.read().strip())
