@@ -183,7 +183,7 @@ class TestSigningServer(TestCase):
         def new_token():
             req = webob.Request.blank("/token")
             req.environ['REMOTE_ADDR'] = master
-            req.headers['Authorization'] = "Basic %s" % encode_userpass("foo:bar")
+            req.headers['Authorization'] = six.b("Basic %s" % encode_userpass("foo:bar"))
             req.method = 'POST'
             req.POST['slave_ip'] = slave
             req.POST['duration'] = "300"
