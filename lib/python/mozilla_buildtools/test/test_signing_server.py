@@ -26,7 +26,7 @@ def encode_userpass(userpass):
     b64 = b64encode(userpass)
     if six.PY3:
         b64 = b64.decode('utf-8')
-    return b64
+    return six.b("Basic {}".format(b64))
 
 
 class TestTokens(TestCase):
@@ -131,7 +131,7 @@ class TestSigningServer(TestCase):
     def testNewToken(self):
         req = webob.Request.blank("/token")
         req.environ['REMOTE_ADDR'] = '127.1.0.1'
-        req.headers['Authorization'] = "Basic %s" % encode_userpass("foo:bar")
+        req.headers['Authorization'] = encode_userpass("foo:bar")
         req.method = 'POST'
         req.POST['slave_ip'] = "1.2.3.4"
         req.POST['duration'] = "300"
@@ -144,7 +144,7 @@ class TestSigningServer(TestCase):
     def testNewTokenAuth2(self):
         req = webob.Request.blank("/token")
         req.environ['REMOTE_ADDR'] = '127.1.0.1'
-        req.headers['Authorization'] = "Basic %s" % encode_userpass("fuz:baz")
+        req.headers['Authorization'] = encode_userpass("fuz:baz")
         req.method = 'POST'
         req.POST['slave_ip'] = "1.2.3.4"
         req.POST['duration'] = "300"
@@ -157,7 +157,7 @@ class TestSigningServer(TestCase):
     def testNewTokenBadIp(self):
         req = webob.Request.blank("/token")
         req.environ['REMOTE_ADDR'] = '127.0.0.1'
-        req.headers['Authorization'] = "Basic %s" % encode_userpass("foo:bar")
+        req.headers['Authorization'] = encode_userpass("foo:bar")
         req.method = 'POST'
         req.POST['slave_ip'] = "1.2.3.4"
         req.POST['duration'] = "300"
@@ -168,7 +168,7 @@ class TestSigningServer(TestCase):
     def testNewTokenBadAuth(self):
         req = webob.Request.blank("/token")
         req.environ['REMOTE_ADDR'] = '127.1.0.1'
-        req.headers['Authorization'] = "Basic %s" % encode_userpass("faz:faz")
+        req.headers['Authorization'] = encode_userpass("faz:faz")
         req.method = 'POST'
         req.POST['slave_ip'] = "1.2.3.4"
         req.POST['duration'] = "300"
@@ -183,7 +183,7 @@ class TestSigningServer(TestCase):
         def new_token():
             req = webob.Request.blank("/token")
             req.environ['REMOTE_ADDR'] = master
-            req.headers['Authorization'] = six.b("Basic %s" % encode_userpass("foo:bar"))
+            req.headers['Authorization'] = encode_userpass("foo:bar")
             req.method = 'POST'
             req.POST['slave_ip'] = slave
             req.POST['duration'] = "300"
