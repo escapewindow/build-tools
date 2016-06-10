@@ -12,7 +12,7 @@ import shutil
 import tempfile
 from unittest import TestCase
 from six import StringIO
-from ConfigParser import RawConfigParser
+from six.moves.configparser import RawConfigParser
 import mock
 import webob
 

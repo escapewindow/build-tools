@@ -299,7 +299,7 @@ class SigningServer:
         self._cleanup_loop_thead.kill()
 
     def load_config(self, config):
-        from ConfigParser import NoOptionError
+        from six.moves.configparser import NoOptionError
 
         # For generating new tokens
         self.token_secret = config.get('security', 'token_secret')

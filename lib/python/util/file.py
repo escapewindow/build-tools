@@ -4,7 +4,7 @@ import os
 import shutil
 import hashlib
 import tempfile
-from ConfigParser import RawConfigParser
+from six.moves.configparser import RawConfigParser
 log = logging.getLogger(__name__)
 
 
