@@ -74,16 +74,16 @@ class TestRunCmdPeriodicPoll(unittest.TestCase):
 class TestGetOutput(unittest.TestCase):
     def testOutput(self):
         output = get_output(['echo', 'hello'])
-        self.assertEquals(output, 'hello\n')
+        self.assertEquals(output, b'hello\n')
 
     def testStdErr(self):
         output = get_output(
             ['bash', '-c', 'echo hello 1>&2'], include_stderr=True)
-        self.assertEquals(output, 'hello\n')
+        self.assertEquals(output, b'hello\n')
 
     def testNoStdErr(self):
         output = get_output(['bash', '-c', 'echo hello 1>&2'])
-        self.assertEquals(output, '')
+        self.assertEquals(output, b'')
 
     def testBadOutput(self):
         self.assertRaises(subprocess.CalledProcessError, get_output, ['false'])
@@ -94,7 +94,7 @@ class TestGetOutput(unittest.TestCase):
         try:
             get_output(['bash', '-c', 'echo hello && false'])
         except subprocess.CalledProcessError as e:
-            self.assertEquals(e.output, 'hello\n')
+            self.assertEquals(e.output, b'hello\n')
         else:
             self.fail("get_output did not raise CalledProcessError")
 

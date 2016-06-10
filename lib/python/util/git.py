@@ -2,7 +2,6 @@
 import os
 import subprocess
 from six.moves.urllib import parse as urlparse
-import urllib
 import re
 
 from util.commands import run_cmd, remove_path, run_quiet_cmd
@@ -29,8 +28,8 @@ def _make_absolute(repo):
 
 def get_repo_name(repo):
     bits = urlparse.urlsplit(repo)
-    host = urllib.quote(bits.netloc, "")
-    path = urllib.quote(bits.path.lstrip("/"), "")
+    host = urlparse.quote(bits.netloc, "")
+    path = urlparse.quote(bits.path.lstrip("/"), "")
     return os.path.join(host, path)
 
 
