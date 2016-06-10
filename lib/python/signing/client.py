@@ -211,7 +211,7 @@ def buildValidatingOpener(ca_certs):
         assert HTTPSHandler  # pyflakes
         assert HTTPSConnection  # pyflakes
     except ImportError:
-        from httplib import HTTPSConnection
+        from six.moves.http_client import HTTPSConnection
         from six.moves.urllib.request import HTTPSHandler
 
     import ssl
@@ -259,7 +259,6 @@ def uploadfile(baseurl, filename, format_, token, nonce):
     `sesson_key` and `nonce` are string values that get passed as POST
     parameters.
     """
-    from poster.encode import multipart_encode
     filehash = sha1sum(filename)
 
     try:
