@@ -12,12 +12,13 @@ deps = [
     'docopt',
     'python-dateutil',
     'jinja2',
+    'redo',
+    'six',
 ]
 
 if sys.version_info[:2] == (2, 7):
     deps.extend([
         'Twisted==10.1.0',
-        'redo',
     ])
 
 setup(
