@@ -1,6 +1,24 @@
 #! /usr/bin/env python
 
 from setuptools import setup, find_packages
+import sys
+
+deps = [
+    'sqlalchemy',
+    'argparse',
+    'simplejson',
+    'furl',
+    'requests',
+    'docopt',
+    'python-dateutil',
+    'jinja2',
+]
+
+if sys.version_info[:2] == (2, 7):
+    deps.extend([
+        'Twisted==10.1.0',
+        'redo',
+    ])
 
 setup(
     name="buildtools",
@@ -17,18 +35,7 @@ setup(
 
     test_suite='mozilla_buildtools.test',
 
-    install_requires=[
-        'sqlalchemy',
-        'argparse',
-        'Twisted==10.1.0',
-        'simplejson',
-        'furl',
-        'requests',
-        'docopt',
-        'python-dateutil',
-        'jinja2',
-        'redo',
-    ],
+    install_requires=deps,
 
     entry_points={
         'console_scripts': [
