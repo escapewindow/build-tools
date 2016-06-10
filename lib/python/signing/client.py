@@ -5,7 +5,7 @@ import os
 import hashlib
 import time
 import socket
-import httplib
+import six.moves.http_client as httplib
 import urllib
 
 # TODO: Use util.command

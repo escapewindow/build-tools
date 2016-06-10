@@ -6,7 +6,7 @@
 # This recipe is covered under the Python license:
 # http://www.python.org/license
 
-import httplib
+import six.moves.http_client as httplib
 import mimetypes
 import socket
 from socket import error, herror, gaierror, timeout

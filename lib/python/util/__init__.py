@@ -1,5 +1,6 @@
 import hashlib
 import binascii
+import six
 
 
 def sha1string(s):
@@ -9,6 +10,8 @@ def sha1string(s):
 
 def b64(s):
     "Return s base64 encoded, with tailing whitespace and = removed"
+    if six.PY3 and isinstance(s, str):
+        s = s.encode('utf-8')
     return binascii.b2a_base64(s).rstrip("=\n")
 
 
