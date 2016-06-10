@@ -1,13 +1,12 @@
-from __future__ import with_statement
+from __future__ import with_statement, print_function
 # We don't support python2.5 for the server
 from nose import SkipTest
 import sys
 if sys.version_info < (2, 6, 0):
     raise SkipTest
 
-
 import time
-from base64 import b64encode
+from codecs import encode
 import hashlib
 import shutil
 import tempfile
@@ -23,10 +22,11 @@ import signing.server as ss
 
 def encode_userpass(userpass):
     userpass = six.b(userpass)
-    b64 = b64encode(userpass)
+    b64 = encode(userpass, 'base64')
     if six.PY3:
         b64 = b64.decode('utf-8')
-    return six.b("Basic {}".format(b64))
+    print(b64)
+    return "Basic {}".format(b64)
 
 
 class TestTokens(TestCase):
