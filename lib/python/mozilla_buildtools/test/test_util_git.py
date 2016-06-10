@@ -2,6 +2,7 @@ import unittest
 import tempfile
 import shutil
 import os
+import six
 import subprocess
 from util.commands import run_cmd, get_output
 
@@ -9,12 +10,22 @@ import util.git as git
 from util.file import touch
 
 
+def toStr(text):
+    if six.PY3:
+        try:
+            text = text.decode('utf-8')
+        except UnicodeDecodeError:
+            pass
+    return text
+
+
 def getRevisions(dest, branches=None):
     retval = []
     cmd = ['git', 'log', '--pretty=oneline']
     if branches:
         cmd.extend(branches)
-    for line in get_output(cmd, cwd=dest).split('\n'):
+    output = get_output(cmd, cwd=dest)
+    for line in toStr(output).split('\n'):
         line = line.strip()
         if not line:
             continue
