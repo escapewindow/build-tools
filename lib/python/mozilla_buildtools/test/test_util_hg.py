@@ -1,8 +1,9 @@
 import unittest
-import tempfile
-import shutil
 import os
+import shutil
 import subprocess
+import sys
+import tempfile
 import time
 import util.hg as hg
 from util.hg import clone, pull, update, hg_ver, mercurial, _make_absolute, \
@@ -100,6 +101,7 @@ class TestIsHgCset(unittest.TestCase):
         self.assertFalse(is_hg_cset('GECKO77_203512230833_RELBRANCH'))
 
 
+@unittest.skipIf(sys.version_info >= (3, 5), "Mercurial doesn't support py3!")
 class TestHg(unittest.TestCase):
     def setUp(self):
         tmpdir = None
