@@ -1,3 +1,4 @@
+from __future__ import print_function
 import base64
 import os
 import hashlib
@@ -30,17 +31,21 @@ def make_token_data(slave_ip, valid_from, valid_to, chaff_bytes=16):
     be signed, and the signature passed back to clients as the token
     key."""
     chaff = b64(os.urandom(chaff_bytes))
+    if six.PY3 and isinstance(chaff, six.binary_type):
+        chaff = chaff.decode('utf-8')
     block = "%s:%s:%s:%s" % (slave_ip, valid_from, valid_to,
             chaff)
+    if six.PY3 and isinstance(block, six.string_types):
+        block = six.b(block)
     return block
 
 
 def sign_data(data, secret, hsh=hashlib.sha256):
     """Returns b64(hmac(secret, data))"""
-    h = hmac.new(six.b(secret), six.b(data), hsh)
+    if six.PY3 and isinstance(secret, six.string_types):
+        secret = six.b(secret)
+    h = hmac.new(secret, data, hsh)
     signed = b64(h.digest())
-    if six.PY3:
-        signed = signed.decode('utf-8')
     return signed
 
 
@@ -386,8 +391,12 @@ class SigningServer:
         log.info("request for token for slave %s for %i seconds",
                  slave_ip, duration)
         data = make_token_data(slave_ip, valid_from, valid_to)
-        token = data + '!' + sign_data(data, self.token_secret)
-        return token
+        signed_data = sign_data(data, self.token_secret)
+        if six.PY3:
+            data = data.decode('utf-8')
+            signed_data = signed_data.decode('utf-8')
+        token = "{}!{}".format(data, signed_data)
+        return six.b(token)
 
     def cleanup_loop(self):
         try:

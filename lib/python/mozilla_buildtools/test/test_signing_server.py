@@ -31,6 +31,8 @@ class TestTokens(TestCase):
     def testTokenData(self):
         now = int(time.time())
         token = ss.make_token_data("1.2.3.4", now, now + 300)
+        if six.PY3:
+            token = token.decode('utf-8')
 
         parts = token.split(":")
         self.assertEquals(parts[:-1], ["1.2.3.4", str(now), str(now + 300)])
