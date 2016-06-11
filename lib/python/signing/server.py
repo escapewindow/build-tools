@@ -66,7 +66,7 @@ def verify_token(token_data, token, secret):
 def unpack_token_data(token_data):
     """Reverse of make_token_data: takes an encoded string and returns a
     dictionary with token parameters as keys."""
-    bits = to_bytes(token_data).split(b":")
+    bits = to_string(token_data).split(":")
     return dict(
         slave_ip=bits[0],
         valid_from=int(bits[1]),

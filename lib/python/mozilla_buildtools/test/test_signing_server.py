@@ -20,19 +20,27 @@ import webob
 import signing.server as ss
 
 
+def to_string(obj):
+    if six.PY3 and isinstance(obj, six.binary_type):
+        obj = obj.decode('utf-8')
+    return obj
+
+
+def to_bytes(obj):
+    if six.PY3 and isinstance(obj, six.string_types):
+        obj = obj.encode('utf-8')
+    return obj
+
+
 def encode_userpass(userpass):
-    auth = base64.encodestring(six.b(userpass)).rstrip(b'\n')
-    if six.PY3:
-        auth = auth.decode('utf-8')
+    auth = to_string(base64.encodestring(to_bytes(userpass)).rstrip(b'\n'))
     return "Basic {}".format(auth)
 
 
 class TestTokens(TestCase):
     def testTokenData(self):
         now = int(time.time())
-        token = ss.make_token_data("1.2.3.4", now, now + 300)
-        if six.PY3:
-            token = token.decode('utf-8')
+        token = to_string(ss.make_token_data("1.2.3.4", now, now + 300))
 
         parts = token.split(":")
         self.assertEquals(parts[:-1], ["1.2.3.4", str(now), str(now + 300)])
