@@ -2,6 +2,7 @@ import os
 from os import path
 import urllib
 import socket
+import six
 from six.moves.urllib.request import urlopen, urlretrieve
 from six.moves.urllib.error import HTTPError, URLError
 
@@ -28,7 +29,7 @@ def downloadReleaseBuilds(stageServer, productName, brandName, version,
                                   signed=signed)
 
     env = {}
-    for fileName, remoteFile in files.iteritems():
+    for fileName, remoteFile in six.iteritems(files):
         url = '/'.join([p.strip('/') for p in [candidatesDir,
                                                urllib.quote(remoteFile)]])
         log.info("Downloading %s to %s", url, fileName)

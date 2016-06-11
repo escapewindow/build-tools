@@ -1,5 +1,6 @@
 import collections
 from copy import copy
+import six
 
 
 class ChunkingError(Exception):
@@ -25,7 +26,7 @@ def getChunk(things, chunks, thisChunk):
 
 # From https://stackoverflow.com/questions/3232943/update-value-of-a-nested-dictionary-of-varying-depth
 def recursive_update(d, u):
-    for k, v in u.iteritems():
+    for k, v in six.iteritems(u):
         if isinstance(v, collections.Mapping):
             r = recursive_update(d.get(k, {}), v)
             d[k] = r

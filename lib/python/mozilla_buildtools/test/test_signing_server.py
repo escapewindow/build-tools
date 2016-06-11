@@ -6,7 +6,7 @@ if sys.version_info < (2, 6, 0):
     raise SkipTest
 
 import time
-from codecs import encode
+import base64
 import hashlib
 import shutil
 import tempfile
@@ -21,12 +21,11 @@ import signing.server as ss
 
 
 def encode_userpass(userpass):
-    userpass = six.b(userpass)
-    b64 = encode(userpass, 'base64')
+    auth = base64.encodestring(six.b(userpass)).rstrip(b'\n')
     if six.PY3:
-        b64 = b64.decode('utf-8')
-    print(b64)
-    return "Basic {}".format(b64)
+        auth = auth.decode('utf-8')
+    print(auth)
+    return "Basic {}".format(auth)
 
 
 class TestTokens(TestCase):

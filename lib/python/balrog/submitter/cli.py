@@ -2,6 +2,7 @@ try:
     import simplejson as json
 except ImportError:
     import json
+import six
 
 from release.info import getProductDetails
 from release.paths import makeCandidatesDir
@@ -148,7 +149,7 @@ class ReleaseCreatorV3(ReleaseCreatorBase):
         if partialUpdates:
             data["ftpFilenames"]["partials"] = {}
             data["bouncerProducts"]["partials"] = {}
-            for previousVersion, previousInfo in partialUpdates.iteritems():
+            for previousVersion, previousInfo in six.iteritems(partialUpdates):
                 from_ = get_release_blob_name(productName, previousVersion,
                                               previousInfo["buildNumber"],
                                               self.dummy)
@@ -218,7 +219,7 @@ class ReleaseCreatorV4(ReleaseCreatorBase):
 
         for channel in uniqueChannels:
             data["fileUrls"][channel]["partials"] = {}
-            for previousVersion, previousInfo in partialUpdates.iteritems():
+            for previousVersion, previousInfo in six.iteritems(partialUpdates):
                 from_ = get_release_blob_name(productName, previousVersion,
                                                 previousInfo["buildNumber"],
                                                 self.dummy)
