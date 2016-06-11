@@ -1,5 +1,6 @@
 import os
 import re
+import six
 from util.algorithms import getChunk
 
 
@@ -115,9 +116,9 @@ class UpdateVerifyConfig(object):
            storage"""
         if self.getRelease(build_id, from_path):
             raise UpdateVerifyError("Couldn't add release identified by build_id '%s' and from_path '%s': already exists in config" % (build_id, from_path))
-        if isinstance(locales, basestring):
+        if isinstance(locales, six.string_types):
             locales = sorted(list(locales.split()))
-        if isinstance(patch_types, basestring):
+        if isinstance(patch_types, six.string_types):
             patch_types = list(patch_types.split())
         self.releases.append({
             "release": release,

@@ -70,7 +70,7 @@ concurrency = 4
 class TestSigningServer(TestCase):
     def setUp(self):
         self.tmpdir = tempfile.mkdtemp()
-        self.config_data = six.b(config_data % dict(tmpdir=self.tmpdir))
+        self.config_data = config_data % dict(tmpdir=self.tmpdir)
 
         config = RawConfigParser()
         config.readfp(StringIO(self.config_data))
