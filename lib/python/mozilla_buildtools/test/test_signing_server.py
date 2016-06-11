@@ -24,7 +24,6 @@ def encode_userpass(userpass):
     auth = base64.encodestring(six.b(userpass)).rstrip(b'\n')
     if six.PY3:
         auth = auth.decode('utf-8')
-    print(auth)
     return "Basic {}".format(auth)
 
 

@@ -98,7 +98,7 @@ class ReleaseCreatorBase(object):
         api = Release(name=name, auth=self.auth, api_root=self.api_root)
         try:
             current_data, data_version = api.get_data()
-        except HTTPError, e:
+        except HTTPError as e:
             if e.response.status_code == 404:
                 log.warning("Release blob doesn't exist, using empty data...")
                 current_data, data_version = {}, None

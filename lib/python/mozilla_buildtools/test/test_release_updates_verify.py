@@ -1,4 +1,4 @@
-from md5 import md5
+from hashlib import md5
 import os
 from os import path
 from tempfile import mkstemp

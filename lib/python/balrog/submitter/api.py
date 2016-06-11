@@ -88,7 +88,7 @@ class API(object):
                 # we've already made the request.
                 data['csrf_token'] = self.csrf_token = res.headers[
                     'X-CSRF-Token']
-            except requests.HTTPError, e:
+            except requests.HTTPError as e:
                 # However, if the resource doesn't exist yet we may as well
                 # not bother doing another request solely for a token unless
                 # we don't have a valid one already.
