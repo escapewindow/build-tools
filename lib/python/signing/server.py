@@ -45,7 +45,7 @@ def make_token_data(slave_ip, valid_from, valid_to, chaff_bytes=16):
     chaff = to_string(b64(os.urandom(chaff_bytes)))
     block = "%s:%s:%s:%s" % (slave_ip, valid_from, valid_to,
             chaff)
-    return to_bytes(block)
+    return block
 
 
 def sign_data(data, secret, hsh=hashlib.sha256):
@@ -53,7 +53,7 @@ def sign_data(data, secret, hsh=hashlib.sha256):
     data = to_bytes(data)
     secret = to_bytes(secret)
     h = hmac.new(secret, data, hsh)
-    signed = b64(h.digest())
+    signed = to_string(b64(h.digest()))
     return signed
 
 
@@ -366,7 +366,7 @@ class SigningServer:
                              self.passphrases)
 
     def verify_token(self, token, slave_ip):
-        token_data, token_sig = token.split(b'!', 1)
+        token_data, token_sig = to_string(token).split('!', 1)
 
         # validate the signature, so we know token_data is reliable
         for secret in self.token_secrets:
@@ -693,7 +693,7 @@ class SigningServer:
                     return ""
                 try:
                     basic, auth = req.headers['Authorization'].split()
-                    auth = base64.b64decode(auth).decode('utf-8')
+                    auth = to_string(base64.b64decode(auth))
                     if basic != "Basic" or auth not in self.token_auths:
                         start_response("401 Authorization Required", [])
                         return ""
@@ -701,7 +701,7 @@ class SigningServer:
                     start_response("401 Authorization Required", [])
                     return ""
 
-                return self.handle_token(environ, start_response, values)
+                return to_bytes(self.handle_token(environ, start_response, values))
             elif magic == 'sign':
                 # Validate token
                 if 'token' not in values:
@@ -718,7 +718,7 @@ class SigningServer:
                 next_nonce = 'UNUSED'
                 headers.append(('X-Nonce', 'UNUSED'))
 
-                return self.handle_upload(environ, start_response, values, rest, next_nonce)
+                return to_string(self.handle_upload(environ, start_response, values, rest, next_nonce))
         except:
             log.exception("ISE")
             start_response("500 Internal Server Error", headers)

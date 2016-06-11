@@ -33,7 +33,7 @@ def to_bytes(obj):
 
 
 def encode_userpass(userpass):
-    auth = to_string(base64.encodestring(to_bytes(userpass)).rstrip(b'\n'))
+    auth = to_string(base64.encodestring(to_bytes(userpass))).rstrip('\n')
     return "Basic {}".format(auth)
 
 
@@ -197,6 +197,7 @@ class TestSigningServer(TestCase):
             req.POST['duration'] = "300"
             resp = req.get_response(self.server)
             self.assertEquals(resp.status_code, 200)
+            app_iter = resp.app_iter
             return resp.body
 
         def sign(token, nonce, filename, data, slave=slave, expect_fail=False):
