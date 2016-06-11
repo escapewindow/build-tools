@@ -37,7 +37,10 @@ def make_token_data(slave_ip, valid_from, valid_to, chaff_bytes=16):
 def sign_data(data, secret, hsh=hashlib.sha256):
     """Returns b64(hmac(secret, data))"""
     h = hmac.new(six.b(secret), six.b(data), hsh)
-    return b64(h.digest())
+    signed = b64(h.digest())
+    if six.PY3:
+        signed = signed.decode('utf-8')
+    return signed
 
 
 def verify_token(token_data, token, secret):
