@@ -90,7 +90,7 @@ def downloadUpdate(stageServer, productName, version, buildNumber,
 def downloadUpdateIgnore404(*args, **kwargs):
     try:
         return downloadUpdate(*args, **kwargs)
-    except HTTPError, e:
+    except HTTPError as e:
         if e.code == 404:
             # New locale
             log.warning('Got 404. Skipping %s' % e.geturl())

@@ -106,17 +106,17 @@ class TestSigningServer(TestCase):
         self.assertEquals(False, self.server.verify_token(token, "1.2.3.5"))
 
     def testOldTokenSecret(self):
-        self.server.token_secret = b"1234567890"
+        self.server.token_secret = "1234567890"
         token = self.server.get_token("1.2.3.4", 300)
-        self.server.token_secret = b"asdfasdf"
+        self.server.token_secret = "asdfasdf"
         self.assertEquals(True, self.server.verify_token(token, "1.2.3.4"))
 
     def testBadOldTokenSecret(self):
         # Make sure that using a bad secret to generate the token results in
         # failure to validate
-        self.server.token_secret = b"bad"
+        self.server.token_secret = "bad"
         token = self.server.get_token("1.2.3.4", 300)
-        self.server.token_secret = b"asdfasdf"
+        self.server.token_secret = "asdfasdf"
         self.assertEquals(False, self.server.verify_token(token, "1.2.3.4"))
 
     def testBadIp(self):

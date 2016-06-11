@@ -4,6 +4,7 @@ import hmac
 import shlex
 import time
 import signal
+import six
 import re
 import tempfile
 # TODO: use util.command
@@ -35,7 +36,7 @@ def make_token_data(slave_ip, valid_from, valid_to, chaff_bytes=16):
 
 def sign_data(data, secret, hsh=hashlib.sha256):
     """Returns b64(hmac(secret, data))"""
-    h = hmac.new(secret, data, hsh)
+    h = hmac.new(six.b(secret), six.b(data), hsh)
     return b64(h.digest())
 
 

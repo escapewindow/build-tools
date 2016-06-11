@@ -13,7 +13,7 @@ class TestUpdateVerifyConfig(unittest.TestCase):
     def setUp(self):
         self.uvc = UpdateVerifyConfig()
         fd, self.tmpfilename = mkstemp()
-        self.tmpfile = os.fdopen(fd, "w")
+        self.tmpfile = os.fdopen(fd, "wb")
 
     def tearDown(self):
         self.tmpfile.close()
