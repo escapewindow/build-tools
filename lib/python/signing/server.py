@@ -1,3 +1,4 @@
+import base64
 import os
 import hashlib
 import hmac
@@ -678,7 +679,8 @@ class SigningServer:
                     return ""
                 try:
                     basic, auth = req.headers['Authorization'].split()
-                    if basic != "Basic" or auth.decode("base64") not in self.token_auths:
+                    auth = base64.b64decode(auth).decode('utf-8')
+                    if basic != "Basic" or auth not in self.token_auths:
                         start_response("401 Authorization Required", [])
                         return ""
                 except:
