@@ -26,24 +26,32 @@ import logging
 log = logging.getLogger(__name__)
 
 
+def to_bytes(obj):
+    if six.PY3 and isinstance(obj, six.string_types):
+        obj = obj.encode('utf-8')
+    return obj
+
+
+def to_string(obj):
+    if six.PY3 and isinstance(obj, six.binary_type):
+        obj = obj.decode('utf-8')
+    return obj
+
+
 def make_token_data(slave_ip, valid_from, valid_to, chaff_bytes=16):
     """Return a string suitable for using as token data. This string will
     be signed, and the signature passed back to clients as the token
     key."""
-    chaff = b64(os.urandom(chaff_bytes))
-    if six.PY3 and isinstance(chaff, six.binary_type):
-        chaff = chaff.decode('utf-8')
+    chaff = to_string(b64(os.urandom(chaff_bytes)))
     block = "%s:%s:%s:%s" % (slave_ip, valid_from, valid_to,
             chaff)
-    if six.PY3 and isinstance(block, six.string_types):
-        block = six.b(block)
-    return block
+    return to_bytes(block)
 
 
 def sign_data(data, secret, hsh=hashlib.sha256):
     """Returns b64(hmac(secret, data))"""
-    if six.PY3 and isinstance(secret, six.string_types):
-        secret = six.b(secret)
+    data = to_bytes(data)
+    secret = to_bytes(secret)
     h = hmac.new(secret, data, hsh)
     signed = b64(h.digest())
     return signed
@@ -58,7 +66,7 @@ def verify_token(token_data, token, secret):
 def unpack_token_data(token_data):
     """Reverse of make_token_data: takes an encoded string and returns a
     dictionary with token parameters as keys."""
-    bits = token_data.split(b":")
+    bits = to_bytes(token_data).split(b":")
     return dict(
         slave_ip=bits[0],
         valid_from=int(bits[1]),
@@ -374,7 +382,7 @@ class SigningServer:
             log.info("Invalid time window")
             return False
 
-        if info['slave_ip'] != six.b(slave_ip):
+        if to_string(info['slave_ip']) != to_string(slave_ip):
             log.info("Invalid slave ip")
             return False
 
@@ -390,13 +398,10 @@ class SigningServer:
         valid_to = now + duration
         log.info("request for token for slave %s for %i seconds",
                  slave_ip, duration)
-        data = make_token_data(slave_ip, valid_from, valid_to)
-        signed_data = sign_data(data, self.token_secret)
-        if six.PY3:
-            data = data.decode('utf-8')
-            signed_data = signed_data.decode('utf-8')
+        data = to_string(make_token_data(slave_ip, valid_from, valid_to))
+        signed_data = to_string(sign_data(data, self.token_secret))
         token = "{}!{}".format(data, signed_data)
-        return six.b(token)
+        return to_bytes(token)
 
     def cleanup_loop(self):
         try:
