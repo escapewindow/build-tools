@@ -58,7 +58,7 @@ def verify_token(token_data, token, secret):
 def unpack_token_data(token_data):
     """Reverse of make_token_data: takes an encoded string and returns a
     dictionary with token parameters as keys."""
-    bits = token_data.split(":")
+    bits = token_data.split(b":")
     return dict(
         slave_ip=bits[0],
         valid_from=int(bits[1]),
@@ -358,7 +358,7 @@ class SigningServer:
                              self.passphrases)
 
     def verify_token(self, token, slave_ip):
-        token_data, token_sig = token.split('!', 1)
+        token_data, token_sig = token.split(b'!', 1)
 
         # validate the signature, so we know token_data is reliable
         for secret in self.token_secrets:
@@ -374,7 +374,7 @@ class SigningServer:
             log.info("Invalid time window")
             return False
 
-        if info['slave_ip'] != slave_ip:
+        if info['slave_ip'] != six.b(slave_ip):
             log.info("Invalid slave ip")
             return False
 
