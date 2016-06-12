@@ -146,7 +146,8 @@ class TestSigningServer(TestCase):
         resp = req.get_response(self.server)
 
         self.assertEquals(resp.status_code, 200)
-        token = resp.body
+        # For some reason resp.body dies in py3
+        token = resp.app_iter
         self.assertTrue(self.server.verify_token(token, "1.2.3.4"))
 
     def testNewTokenAuth2(self):
@@ -159,7 +160,8 @@ class TestSigningServer(TestCase):
         resp = req.get_response(self.server)
 
         self.assertEquals(resp.status_code, 200)
-        token = resp.body
+        # For some reason resp.body dies in py3
+        token = resp.app_iter
         self.assertTrue(self.server.verify_token(token, "1.2.3.4"))
 
     def testNewTokenBadIp(self):
@@ -197,11 +199,12 @@ class TestSigningServer(TestCase):
             req.POST['duration'] = "300"
             resp = req.get_response(self.server)
             self.assertEquals(resp.status_code, 200)
-            app_iter = resp.app_iter
-            return resp.body
+            # For some reason resp.body dies in py3
+            return to_string(resp.app_iter)
 
         def sign(token, nonce, filename, data, slave=slave, expect_fail=False):
             h = hashlib.new('sha1')
+            data = to_bytes(data)
             h.update(data)
             sha1 = h.hexdigest()
             req = webob.Request.blank("/sign/gpg", POST={

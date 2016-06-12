@@ -480,7 +480,7 @@ class SigningServer:
         filename_fn = os.path.join(self.unsigned_dir, filehash + ".fn")
         fd, tmpname = tempfile.mkstemp(dir=self.unsigned_dir)
         fp = os.fdopen(fd, 'wb')
-        fp.write(filename)
+        fp.write(to_bytes(filename))
         fp.close()
         os.rename(tmpname, filename_fn)
 
