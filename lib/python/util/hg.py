@@ -647,10 +647,10 @@ def apply_and_push(localrepo, remote, changer, max_attempts=10,
                 log.debug("Failed to rebase: %s" % str(e))
                 # abort failed rebase
                 run_cmd(['hg', 'rebase', '--abort'], cwd=localrepo)
-                update(localrepo, branch=branch)
                 for r in reversed(new_revs):
                     run_cmd(['hg', '--config', 'extensions.mq=', 'strip',
                              '--no-backup', r[REVISION]], cwd=localrepo)
+                update(localrepo, branch=branch)
                 changer(localrepo, n + 1)
 
 
