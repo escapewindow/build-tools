@@ -2,6 +2,7 @@ import os
 import re
 import six
 from util.algorithms import getChunk
+from util import to_bytes
 
 
 class UpdateVerifyError(Exception):
@@ -96,12 +97,12 @@ class UpdateVerifyConfig(object):
                 else:
                     value = None
                 if value is not None:
-                    fh.write(six.b(key))
+                    fh.write(to_bytes(key))
                     fh.write(b"=")
                     if isinstance(value, (list, tuple)):
-                        fh.write(six.b('"%s" ' % " ".join(value)))
+                        fh.write(to_bytes('"%s" ' % " ".join(value)))
                     else:
-                        fh.write(six.b('"%s" ' % str(value)))
+                        fh.write(to_bytes('"%s" ' % str(value)))
             # Rewind one character to avoid having a trailing space
             fh.seek(-1, os.SEEK_CUR)
             fh.write(b"\n")
