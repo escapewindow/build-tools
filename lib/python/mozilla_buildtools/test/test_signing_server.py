@@ -40,7 +40,7 @@ def encode_userpass(userpass):
 class TestTokens(TestCase):
     def testTokenData(self):
         now = int(time.time())
-        token = to_string(ss.make_token_data("1.2.3.4", now, now + 300))
+        token = ss.make_token_data("1.2.3.4", now, now + 300)
 
         parts = token.split(":")
         self.assertEquals(parts[:-1], ["1.2.3.4", str(now), str(now + 300)])
