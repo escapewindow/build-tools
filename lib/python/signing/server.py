@@ -19,23 +19,11 @@ from gevent import pywsgi
 from IPy import IP
 import webob
 
-from util import b64
+from util import b64, to_bytes, to_string
 from util.file import safe_unlink, sha1sum, safe_copyfile
 
 import logging
 log = logging.getLogger(__name__)
-
-
-def to_bytes(obj):
-    if six.PY3 and isinstance(obj, six.string_types):
-        obj = obj.encode('utf-8')
-    return obj
-
-
-def to_string(obj):
-    if six.PY3 and isinstance(obj, six.binary_type):
-        obj = obj.decode('utf-8')
-    return obj
 
 
 def make_token_data(slave_ip, valid_from, valid_to, chaff_bytes=16):

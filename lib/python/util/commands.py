@@ -6,6 +6,7 @@ import platform
 import logging
 import six
 import tempfile
+from util import to_string
 log = logging.getLogger(__name__)
 
 try:
@@ -147,14 +148,6 @@ def run_cmd_periodic_poll(cmd, warning_interval=300, poll_interval=0.25,
         time.sleep(poll_interval)
 
 
-def to_str(obj):
-    try:
-        obj = obj.decode('utf-8')
-    except (AttributeError, UnicodeDecodeError):
-        pass
-    return obj
-
-
 def get_output(cmd, include_stderr=False, dont_log=False, timeout=86400,
                poll_interval=0.25, **kwargs):
     """Run cmd (a list of arguments) in a subprocess and check its completion
@@ -203,7 +196,7 @@ def get_output(cmd, include_stderr=False, dont_log=False, timeout=86400,
             elapsed = now - start_time
             if rc is not None:
                 outfile.seek(0)
-                output = to_str(outfile.read())
+                output = to_string(outfile.read())
                 log.debug("Process returned %s", rc)
                 if rc == 0:
                     log.info("command: END (%.2fs elapsed)\n", elapsed)
