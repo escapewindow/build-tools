@@ -5,7 +5,7 @@ import six
 from six.moves.urllib import parse as urlparse
 import re
 
-from util import to_stringing
+from util import to_string
 from util.commands import run_cmd, remove_path, run_quiet_cmd
 from util.file import safe_unlink
 
