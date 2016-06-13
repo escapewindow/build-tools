@@ -284,8 +284,6 @@ class TestGit(unittest.TestCase):
         # Add a commit to the mirror
         newfile = os.path.join(mirror2, 'newfile')
         touch(newfile)
-        run_cmd(['git', 'config', 'user.email', 'you@example.com'], cwd=mirror2)
-        run_cmd(['git', 'config', 'user.name', 'your name'], cwd=mirror2)
         run_cmd(['git', 'add', 'newfile'], cwd=mirror2)
         run_cmd(['git', 'commit', '-q', '-m', 'add newfile'], cwd=mirror2)
         new_rev = getRevisions(mirror2)[-1]
