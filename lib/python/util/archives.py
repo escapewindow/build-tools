@@ -5,6 +5,7 @@ import logging
 import tempfile
 import bz2
 import shutil
+from zipfile import ZipFile
 
 from util.paths import cygpath, findfiles
 
@@ -13,6 +14,7 @@ log = logging.getLogger(__name__)
 SEVENZIP = os.environ.get('SEVENZIP', '7z')
 MAR = os.environ.get('MAR', 'mar')
 TAR = os.environ.get('TAR', 'tar')
+ZIP = os.environ.get('ZIP', 'zip')
 
 
 def _noumask():
@@ -81,6 +83,36 @@ def packexe(exefile, srcdir):
         i.close()
     o.close()
     os.unlink(appbundle)
+
+
+def unpackzip(filename, destdir):
+    try:
+        z = ZipFile(filename, 'r')
+        z.extractall(destdir)
+    except:
+        log.exception("Error unpacking zip file %s to %s", filename, destdir)
+        raise
+
+
+def zip_dir(zipfile, srcdir):
+    """ Pack a zip file using all the files in the given srcdir """
+    files = os.listdir(srcdir)
+    packzip(zipfile, files, srcdir)
+
+
+def packzip(zipfile, files, srcdir):
+    """ Pack the given files into a zip, setting cwd = srcdir"""
+    nullfd = open(os.devnull, "w")
+    zipfile = cygpath(os.path.abspath(zipfile))
+    log.debug("pack zip %s from folder %s with files ", zipfile, srcdir)
+    log.debug(files)
+    try:
+        check_call([ZIP, zipfile] + files, cwd=srcdir,
+                   stdout=nullfd, preexec_fn=_noumask)
+    except:
+        log.exception("Error packing zip file %s to %s", zipfile, srcdir)
+        raise
+    nullfd.close()
 
 
 def bunzip2(filename):
@@ -191,6 +223,8 @@ def unpackfile(filename, destdir):
         return unpackexe(filename, destdir)
     elif filename.endswith(".tar"):
         return unpacktar(filename, destdir)
+    elif filename.endswith(".zip"):
+        return unpackzip(filename, destdir)
     else:
         raise ValueError("Unknown file type: %s" % filename)
 
@@ -204,5 +238,7 @@ def packfile(filename, srcdir):
         return packexe(filename, srcdir)
     elif filename.endswith(".tar"):
         return tar_dir(filename, srcdir)
+    elif filename.endswith(".zip"):
+        return zip_dir(filename, srcdir)
     else:
         raise ValueError("Unknown file type: %s" % filename)
