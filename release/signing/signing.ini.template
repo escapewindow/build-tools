@@ -93,5 +93,5 @@ mar_cmd = /path/to/signmar -d /path/to/nsscerts -n keyname -s
 mar_sha384_cmd = /path/to/signmar-sha384 -d /path/to/nsscerts -n keyname -s
 # widevine info
 widevine_key = /path/to/key.pem
-widevine_cert = /path/to/cert.pem
+widevine_cert = /path/to/cert.der
 widevine_cmd = /path/to/script --private_key %(widevine_key)s --certificate %(widevine_cert)s --input %(input)s --flags $(blessed)s --prompt_passphrase
