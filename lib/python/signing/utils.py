@@ -368,8 +368,8 @@ def dmg_signfile(filename, keychain, signing_identity, subject_ou, fake=False):
         raise
 
 
-def widevine_signfile(filename, sigfile, key, cert, cmd, fake=False,
-                      passphrase=None, blessed=None):
+def widevine_signfile(filename, sigfile, key, cert, widevine_cmd, fake=False,
+                      passphrase=None, blessed="0"):
     """Sign the given file with the widevine key and cert. The signature is
     written to sigfile.
 
@@ -387,13 +387,16 @@ I am ur signature!
         time.sleep(1)
         return
 
+    stdout = tempfile.TemporaryFile()
+
     if isinstance(widevine_cmd, basestring):
         widevine_cmd = shlex.split(widevine_cmd)
     repl_dict = {
         "widevine_key": key,
         "widevine_cert": cert,
         "input": filename,
-        "blessed": "1" if blessed else "0",
+        "output": sigfile,
+        "blessed": blessed,
     }
     for i, item in enumerate(widevine_cmd):
         widevine_cmd[i] = item % repl_dict

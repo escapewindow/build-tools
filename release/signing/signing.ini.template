@@ -75,7 +75,8 @@ testfile_mar = test.mar
 testfile_mar_sha384 = test.mar
 testfile_gpg = test.mar
 testfile_emevoucher = test.bin
-testfile_widevine = test.exe
+testfile_widevine = test.tar.gz
+testfile_widevine_blessed = test.exe
 
 [signscript]
 # Various settings for signscript. signing-server.py doesn't look in here
@@ -94,4 +95,4 @@ mar_sha384_cmd = /path/to/signmar-sha384 -d /path/to/nsscerts -n keyname -s
 # widevine info
 widevine_key = /path/to/key.pem
 widevine_cert = /path/to/cert.der
-widevine_cmd = /path/to/script --private_key %(widevine_key)s --certificate %(widevine_cert)s --input %(input)s --flags $(blessed)s --prompt_passphrase
+widevine_cmd = python /path/to/script --private_key %(widevine_key)s --certificate %(widevine_cert)s --input %(input)s --output_file %(output)s --flags %(blessed)s --prompt_passphrase

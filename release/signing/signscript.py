@@ -181,14 +181,13 @@ if __name__ == '__main__':
         safe_unlink(tmpfile)
         if not options.widevine_key:
             parser.error("widevine_key required when format is %s" % format_)
-        blessed = False
+        blessed = "0"
         if format_ == "widevine_blessed":
-            blessed = True
-        if shouldSign(filename):
-            widevine_signfile(
-                inputfile, tmpfile, options.widevine_key, options.widevine_cert,
-                options.widevine_cmd, fake=options.fake, passphrase=passphrase,
-                blessed=blessed
-            )
+            blessed = "1"
+        widevine_signfile(
+            inputfile, tmpfile, options.widevine_key, options.widevine_cert,
+            options.widevine_cmd, fake=options.fake, passphrase=passphrase,
+            blessed=blessed
+        )
 
     os.rename(tmpfile, destfile)
